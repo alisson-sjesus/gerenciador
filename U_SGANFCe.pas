@@ -115,7 +115,9 @@ procedure Tfrm_SGA_Principal.opcoesScriptChange(Sender: TObject);
 begin
   if opcoesScript.Text = 'NFC-es pendentes' then
     begin
-      txtScripts.Text := 'select idnfmaster, 1 as tratado, subserie, current_timestamp as datahora, 0 as cstat from nfmaster';
+      txtScripts.Text := 'select idnfmaster, 1 as tratado, subserie, current_timestamp as datahora from' + sLineBreak +
+                         'nfmaster where dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
+                         'and serie = ''NFC-E'' and protocolo = '''' and chavenfe <> '''' and situacao = 0';
     end
     else if opcoesScript.Text = 'Exportar movimentação' then
     begin
@@ -123,7 +125,7 @@ begin
                          '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
                          '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
                          '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
-                         'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.03.2023'' and ''31.03.2023''';
+                         'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''';
     end
     else if opcoesScript.Text = 'Exportar movimentação (Utilizar numeração de NFC-e)' then
       begin
@@ -131,7 +133,7 @@ begin
         '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
         '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
         '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
-        'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.03.2023'' and ''31.03.2023''' + sLineBreak +
+        'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
         'and numnota in (' + txtNFCeOutput.Text + ')';
       end;
          
