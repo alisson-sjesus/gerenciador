@@ -19,6 +19,7 @@ type
     txtNFCe: TMemo;
     txtNFCeOutput: TMemo;
     procedure btn_GerarClick(Sender: TObject);
+    procedure btn_LimparClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -41,21 +42,25 @@ Match: TMatch;
 begin
 
 
-  regex := TRegEx.Create('\d+', [roIgnoreCase]);
+  regex := TRegEx.Create('(?:0{2,})(\d+)(?:\s\d+)?', [roIgnoreCase, roMultiLine]);
   txtNFCeFormat := txtNFCe.Text;
   Matches := RegEx.Matches(txtNFCeFormat);
 
   for Match in Matches do
     if (txtNFCeOutput.Text = '') then
       begin
-        txtNFCeOutput.Text := Match.Value;
+        txtNFCeOutput.Text := Match.Groups[1].Value;
       end
       else
       begin
-        txtNFCeOutput.Text := txtNFCeOutput.Text + ', ' + Match.Value;
+        txtNFCeOutput.Text := txtNFCeOutput.Text + ', ' + Match.Groups[1].Value;
       end;
+  end;
 
-
+procedure Tfrm_SGA_Principal.btn_LimparClick(Sender: TObject);
+begin
+  txtNFCeOutput.Text := '';
+  txtNFCe.Text := '';
 end;
 
 end.
