@@ -22,10 +22,12 @@ type
     opcoesScript: TComboBox;
     Label2: TLabel;
     txtScripts: TMemo;
+    btnCopiarScript: TButton;
     procedure btn_GerarClick(Sender: TObject);
     procedure btn_LimparClick(Sender: TObject);
     procedure btn_CopiarClick(Sender: TObject);
     procedure opcoesScriptChange(Sender: TObject);
+    procedure btnCopiarScriptClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -42,6 +44,12 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure Tfrm_SGA_Principal.btnCopiarScriptClick(Sender: TObject);
+begin
+  Clipboard.AsText := txtScripts.Text;
+  ShowMessage('Script copiado com sucesso!');
+end;
 
 procedure Tfrm_SGA_Principal.btn_CopiarClick(Sender: TObject);
 begin
