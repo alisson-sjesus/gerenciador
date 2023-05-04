@@ -23,11 +23,17 @@ type
     Label2: TLabel;
     txtScripts: TMemo;
     btnCopiarScript: TButton;
+    opcoesUteis: TComboBox;
+    Label3: TLabel;
+    txtUteis: TMemo;
+    btnCopiarUteis: TButton;
     procedure btn_GerarClick(Sender: TObject);
     procedure btn_LimparClick(Sender: TObject);
     procedure btn_CopiarClick(Sender: TObject);
     procedure opcoesScriptChange(Sender: TObject);
     procedure btnCopiarScriptClick(Sender: TObject);
+    procedure opcoesUteisChange(Sender: TObject);
+    procedure btnCopiarUteisClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -49,6 +55,12 @@ procedure Tfrm_SGA_Principal.btnCopiarScriptClick(Sender: TObject);
 begin
   Clipboard.AsText := txtScripts.Text;
   ShowMessage('Script copiado com sucesso!');
+end;
+
+procedure Tfrm_SGA_Principal.btnCopiarUteisClick(Sender: TObject);
+begin
+  Clipboard.AsText := txtUteis.Text;
+  ShowMessage('Texto foi copiado com sucesso!');
 end;
 
 procedure Tfrm_SGA_Principal.btn_CopiarClick(Sender: TObject);
@@ -123,6 +135,14 @@ begin
         'and numnota in (' + txtNFCeOutput.Text + ')';
       end;
          
+end;
+
+procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
+begin
+  if opcoesUteis.Text = 'Portas do Firewall' then
+    begin
+      txtScripts.Text := '65123, 65100, 64123, 9092, 4899, 4096, 3050,992, 993, 995, 587, 465, 445, 80, 21';
+    end;
 end;
 
 end.
