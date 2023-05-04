@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, System.RegularExpressions;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, System.RegularExpressions, Clipbrd;
 
 type
   Tfrm_SGA_Principal = class(TForm)
@@ -20,6 +20,7 @@ type
     txtNFCeOutput: TMemo;
     procedure btn_GerarClick(Sender: TObject);
     procedure btn_LimparClick(Sender: TObject);
+    procedure btn_CopiarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,12 +37,23 @@ implementation
 
 {$R *.dfm}
 
+procedure Tfrm_SGA_Principal.btn_CopiarClick(Sender: TObject);
+begin
+  Clipboard.AsText := txtNFCeOutput.Text;
+  ShowMessage('Numeração copiada com sucesso!');
+end;
+
 procedure Tfrm_SGA_Principal.btn_GerarClick(Sender: TObject);
 var
 Match: TMatch;
 begin
 
-
+if (txtNFCe.Text = '') then
+  begin
+    MessageDlg('Cole as numerações das NFC-es no campo de texto', mtWarning, [mbOK], 0);
+  end
+  else
+  begin
   regex := TRegEx.Create('(?:0{2,})(\d+)(?:\s\d+)?', [roIgnoreCase, roMultiLine]);
   txtNFCeFormat := txtNFCe.Text;
   Matches := RegEx.Matches(txtNFCeFormat);
@@ -56,11 +68,21 @@ begin
         txtNFCeOutput.Text := txtNFCeOutput.Text + ', ' + Match.Groups[1].Value;
       end;
   end;
+end;
 
 procedure Tfrm_SGA_Principal.btn_LimparClick(Sender: TObject);
 begin
-  txtNFCeOutput.Text := '';
-  txtNFCe.Text := '';
+  if (txtNFCe.Text = '') then
+    begin
+      ShowMessage('Campo já está limpo');
+    end
+    else
+
+    begin
+      txtNFCeOutput.Text := '';
+      txtNFCe.Text := '';
+    end;
+
 end;
 
 end.
