@@ -169,8 +169,20 @@ procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
 begin
   if opcoesUteis.Text = 'Portas do Firewall' then
     begin
-      txtScripts.Text := '65123, 65100, 64123, 9092, 4899, 4096, 3050,992, 993, 995, 587, 465, 445, 80, 21';
+      txtUteis.Text := '65123, 65100, 64123, 9092, 4899, 4096, 3050,992, 993, 995, 587, 465, 445, 80, 21';
+    end
+    else if opcoesUteis.Text = 'Reparar base corrompida' then
+    begin
+      txtUteis.Text := '1º passo - gfix -v -f SAC4WIN2.fdb -user SYSDBA -pass masterkey' + sLineBreak +
+                         '2º passo - gfix -m -i SAC4WIN2.fdb -user SYSDBA -pass masterkey' + sLineBreak +
+                         '3º passo - gbak -g -b -z -l -v SAC4WIN2.fdb SAC4WINbkp.fbk -user SYSDBA -pass masterkey' + sLineBreak +
+                         '4º passo - gbak -g -c -z -v SAC4WINbkp.fbk  SAC4WINnewbkp.fdb -user SYSDBA -pass masterkey';
+    end
+    else
+    begin
+      txtScripts.Text := 'Oi :)';
     end;
+
 end;
 
 end.
