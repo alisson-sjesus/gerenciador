@@ -27,6 +27,7 @@ type
     Label3: TLabel;
     txtUteis: TMemo;
     btnCopiarUteis: TButton;
+    checkBoxExibirScript: TCheckBox;
     procedure btn_GerarClick(Sender: TObject);
     procedure btn_LimparClick(Sender: TObject);
     procedure btn_CopiarClick(Sender: TObject);
@@ -34,13 +35,14 @@ type
     procedure btnCopiarScriptClick(Sender: TObject);
     procedure opcoesUteisChange(Sender: TObject);
     procedure btnCopiarUteisClick(Sender: TObject);
+    procedure checkBoxExibirScriptClick(Sender: TObject);
   private
     { Private declarations }
   public
     var
     regex: TRegEx;
     Matches: TMatchCollection;
-    txtNFCeFormat : String;
+    txtNFCeFormat, nfceOutput : String;
     dataAtual: TDateTime;
   end;
 
@@ -94,6 +96,8 @@ if (txtNFCe.Text = '') then
         txtNFCeOutput.Text := txtNFCeOutput.Text + ', ' + Match.Groups[1].Value;
       end;
   end;
+
+  nfceOutput := txtNFCeOutput.Text;
 end;
 
 procedure Tfrm_SGA_Principal.btn_LimparClick(Sender: TObject);
@@ -111,13 +115,35 @@ begin
 
 end;
 
+procedure Tfrm_SGA_Principal.checkBoxExibirScriptClick(Sender: TObject);
+var
+  scriptExportacao : String;
+begin
+  scriptExportacao := 'select n.* from nfmaster n' + sLineBreak +
+        '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
+        '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
+        '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
+        'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
+        'and numnota in (' + nfceOutput + ')';
+
+        if checkBoxExibirScript.Checked then
+          begin
+            txtNFCeOutput.Text := scriptExportacao;
+          end
+          else
+          begin
+            txtNFCeOutput.Text := nfceOutput;
+          end;
+
+end;
+
 procedure Tfrm_SGA_Principal.opcoesScriptChange(Sender: TObject);
 begin
   if opcoesScript.Text = 'NFC-es pendentes' then
     begin
-      txtScripts.Text := 'select idnfmaster, 1 as tratado, subserie, current_timestamp as datahora from' + sLineBreak +
-                         'nfmaster where dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
-                         'and serie = ''NFC-E'' and protocolo = '''' and chavenfe <> '''' and situacao = 0';
+      txtScripts.Text := 'select idnfmaster, 1 as tratado, subserie, current_timestamp as datahora, 0 as cstat from' + sLineBreak +
+                         'nfmaster where n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
+                         'and n.serie = ''NFC-E'' and n.protocolo = '''' and n.chavenfe <> '''' and situacao = 0';
     end
     else if opcoesScript.Text = 'Exportar movimentação' then
     begin
@@ -134,7 +160,7 @@ begin
         '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
         '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
         'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
-        'and numnota in (' + txtNFCeOutput.Text + ')';
+        'and numnota in (' + nfceOutput + ')';
       end;
          
 end;
