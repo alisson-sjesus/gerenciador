@@ -82,7 +82,7 @@ if (txtNFCe.Text = '') then
   end
   else
   begin
-  regex := TRegEx.Create('(?:0{2,})(\d+)(?:\s\d+)?', [roIgnoreCase, roMultiLine]);
+  regex := TRegEx.Create('(?:0{2,})(\d+)(?:\s+)?(?:0{2}\d+)?(?:\d+)?(?:\s\d+)?', [roIgnoreCase, roMultiLine]);
   txtNFCeFormat := txtNFCe.Text;
   Matches := RegEx.Matches(txtNFCeFormat);
 
@@ -124,7 +124,7 @@ begin
         '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
         '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
         'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
-        'and numnota in (' + nfceOutput + ')';
+        'and n.numnota in (' + nfceOutput + ')';
 
         if checkBoxExibirScript.Checked then
           begin
@@ -142,7 +142,7 @@ begin
   if opcoesScript.Text = 'NFC-es pendentes' then
     begin
       txtScripts.Text := 'select idnfmaster, 1 as tratado, subserie, current_timestamp as datahora, 0 as cstat from' + sLineBreak +
-                         'nfmaster where n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
+                         'nfmaster n where n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
                          'and n.serie = ''NFC-E'' and n.protocolo = '''' and n.chavenfe <> '''' and situacao = 0';
     end
     else if opcoesScript.Text = 'Exportar movimentação' then
