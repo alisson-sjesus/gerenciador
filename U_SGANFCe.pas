@@ -106,12 +106,13 @@ begin
     begin
       ShowMessage('Campo já está limpo');
     end
-    else
-
+  else
     begin
       txtNFCeOutput.Text := '';
       txtNFCe.Text := '';
+      nfceOutput := '';
     end;
+
 
 end;
 
@@ -130,7 +131,7 @@ begin
           begin
             txtNFCeOutput.Text := scriptExportacao;
           end
-          else
+        else
           begin
             txtNFCeOutput.Text := nfceOutput;
           end;
@@ -145,7 +146,7 @@ begin
                          'nfmaster n where n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
                          'and n.serie = ''NFC-E'' and n.protocolo = '''' and n.chavenfe <> '''' and situacao = 0';
     end
-    else if opcoesScript.Text = 'Exportar movimentação' then
+  else if opcoesScript.Text = 'Exportar movimentação' then
     begin
       txtScripts.Text := 'select n.* from nfmaster n' + sLineBreak +
                          '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
@@ -153,15 +154,15 @@ begin
                          '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
                          'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''';
     end
-    else if opcoesScript.Text = 'Exportar movimentação (Utilizar numeração de NFC-e)' then
-      begin
+  else if opcoesScript.Text = 'Exportar movimentação (Utilizar numeração de NFC-e)' then
+    begin
         txtScripts.Text := 'select n.* from nfmaster n' + sLineBreak +
         '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
         '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
         '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
         'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
         'and numnota in (' + nfceOutput + ')';
-      end;
+    end;
          
 end;
 
@@ -171,14 +172,14 @@ begin
     begin
       txtUteis.Text := '65123, 65100, 64123, 9092, 4899, 4096, 3050,992, 993, 995, 587, 465, 445, 80, 21';
     end
-    else if opcoesUteis.Text = 'Reparar base corrompida' then
+  else if opcoesUteis.Text = 'Reparar base corrompida' then
     begin
       txtUteis.Text := '1º passo - gfix -v -f SAC4WIN2.fdb -user SYSDBA -pass masterkey' + sLineBreak +
                          '2º passo - gfix -m -i SAC4WIN2.fdb -user SYSDBA -pass masterkey' + sLineBreak +
                          '3º passo - gbak -g -b -z -l -v SAC4WIN2.fdb SAC4WINbkp.fbk -user SYSDBA -pass masterkey' + sLineBreak +
                          '4º passo - gbak -g -c -z -v SAC4WINbkp.fbk  SAC4WINnewbkp.fdb -user SYSDBA -pass masterkey';
     end
-    else
+  else
     begin
       txtScripts.Text := 'Oi :)';
     end;
