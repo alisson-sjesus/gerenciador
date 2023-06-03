@@ -43,6 +43,7 @@ type
     btn_copiarTerceiroPasso: TButton;
     btn_quartoTerceiroPasso: TButton;
     lb_aviso: TLabel;
+    Label7: TLabel;
     procedure btn_GerarClick(Sender: TObject);
     procedure btn_LimparClick(Sender: TObject);
     procedure btn_CopiarClick(Sender: TObject);
@@ -62,7 +63,6 @@ type
     regex: TRegEx;
     Matches: TMatchCollection;
     txtNFCeFormat, nfceOutput : String;
-    dataAtual: TDateTime;
   end;
 
 var
@@ -110,10 +110,29 @@ procedure Tfrm_SGA_Principal.btn_copiarTerceiroPassoClick(Sender: TObject);
     ShowMessage('Texto foi copiado com sucesso!');
   end;
 
+function dataMesPassado(): String;
+  var
+    dataAtual: TDateTime;
+    mesAnterior: TDateTime;
+    dataInicial: TDateTime;
+    dataFinal: TDateTime;
+
+  begin
+    dataAtual := Date;
+    mesAnterior := IncMonth(dataAtual, -1);
+    dataInicial := StartOfTheMonth(mesAnterior);
+    dataFinal := Trunc(EndOfTheMonth(mesAnterior));
+    FormatSettings.ShortDateFormat := 'dd.mm.yyyy';
+
+    Result := '''' + DateTimeToStr(dataInicial) + '''' + ' and ' + '''' + DateTimeToStr(dataFinal) + '''';
+  end;
+
 procedure Tfrm_SGA_Principal.btn_GerarClick(Sender: TObject);
   var
   Match: TMatch;
   begin
+
+
 
   if (txtNFCe.Text = '') then
     begin
@@ -167,7 +186,7 @@ procedure Tfrm_SGA_Principal.checkBoxExibirScriptClick(Sender: TObject);
           '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
           '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
           '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
-          'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
+          'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ' + dataMesPassado() + sLineBreak +
           'and n.numnota in (' + nfceOutput + ')';
 
           if checkBoxExibirScript.Checked then
@@ -186,7 +205,7 @@ procedure Tfrm_SGA_Principal.opcoesScriptChange(Sender: TObject);
     if opcoesScript.Text = 'NFC-es pendentes' then
       begin
         txtScripts.Text := 'select idnfmaster, 1 as tratado, subserie, current_timestamp as datahora, 0 as cstat from' + sLineBreak +
-                           'nfmaster n where n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
+                           'nfmaster n where n.dataentsai between ' + dataMesPassado() + sLineBreak +
                            'and n.serie = ''NFC-E'' and n.protocolo = '''' and n.chavenfe <> '''' and situacao = 0';
       end
     else if opcoesScript.Text = 'Exportar movimentação' then
@@ -195,7 +214,7 @@ procedure Tfrm_SGA_Principal.opcoesScriptChange(Sender: TObject);
                            '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
                            '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
                            '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
-                           'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''';
+                           'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ' + dataMesPassado();
       end
     else if opcoesScript.Text = 'Exportar movimentação (Utilizar numeração de NFC-e)' then
       begin
@@ -203,9 +222,14 @@ procedure Tfrm_SGA_Principal.opcoesScriptChange(Sender: TObject);
           '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
           '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
           '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
-          'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ''01.04.2023'' and ''30.04.2023''' + sLineBreak +
+          'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ' + dataMesPassado() + sLineBreak +
           'and numnota in (' + nfceOutput + ')';
-      end;
+      end
+      else if opcoesScript.Text = '- Selecione uma opção -' then
+        begin
+        txtScripts.Text := '';
+        end;
+
   end;
 
 procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
