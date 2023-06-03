@@ -3,7 +3,7 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Gerenciador v0.3.0'
+  Caption = 'Gerenciador v0.5.0'
   ClientHeight = 469
   ClientWidth = 597
   Color = clCream
@@ -19,7 +19,7 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
     Top = 0
     Width = 597
     Height = 469
-    ActivePage = frmGerenciadorNFCe
+    ActivePage = frmScripts
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 593
@@ -34,6 +34,21 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         Align = alCustom
         Alignment = taCenter
         Caption = 'Insira aqui os n'#250'meros das NFC-es'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label7: TLabel
+        Left = 256
+        Top = 251
+        Width = 82
+        Height = 23
+        Align = alCustom
+        Alignment = taCenter
+        Caption = 'Resultado'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -19
@@ -120,12 +135,16 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         Width = 305
         Height = 21
         TabOrder = 0
-        Text = 'NFC-es pendentes'
+        Text = '- Selecione uma op'#231#227'o -'
         OnChange = opcoesScriptChange
         Items.Strings = (
+          '- Selecione uma op'#231#227'o -'
           'NFC-es pendentes'
           'Exportar movimenta'#231#227'o'
-          'Exportar movimenta'#231#227'o (Utilizar numera'#231#227'o de NFC-e)')
+          'Enviar NFC-es com status de "Envie na frente do caixa"'
+          
+            'Corrigir valor de notas com diferen'#231'a de centavos entre VENDAS e' +
+            ' NFMASTER')
       end
       object txtScripts: TMemo
         Left = 88
@@ -133,16 +152,6 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         Width = 393
         Height = 105
         Color = clSilver
-        Lines.Strings = (
-          
-            'select idnfmaster, 1 as tratado, subserie, current_timestamp as ' +
-            'datahora, 0 as '
-          
-            'cstat from nfmaster where dataentsai between '#39'01.04.2023'#39' and '#39'3' +
-            '0.04.2023'#39' '
-          
-            'and serie = '#39'NFC-E'#39' and protocolo = '#39#39' and chavenfe <> '#39#39' and si' +
-            'tuacao = 0')
         ReadOnly = True
         TabOrder = 1
       end
@@ -353,7 +362,7 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         end
         object btn_copiarTerceiroPasso: TButton
           Left = 470
-          Top = 126
+          Top = 127
           Width = 75
           Height = 21
           Caption = 'Copiar'
@@ -362,7 +371,7 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         end
         object btn_quartoTerceiroPasso: TButton
           Left = 470
-          Top = 174
+          Top = 176
           Width = 75
           Height = 21
           Caption = 'Copiar'
