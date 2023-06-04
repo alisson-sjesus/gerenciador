@@ -19,10 +19,10 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
     Top = 0
     Width = 597
     Height = 469
-    ActivePage = frmUteis
+    ActivePage = frmGerenciadorNFCe
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 1119
+    ExplicitWidth = 593
     ExplicitHeight = 468
     object frmGerenciadorNFCe: TTabSheet
       Caption = 'Gerenciador de NFC-e'
@@ -386,14 +386,20 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         Left = 595
         Top = 3
         Width = 589
-        Height = 342
+        Height = 320
         TabOrder = 4
         Visible = False
+        object txt_comoUsar: TLabel
+          Left = 328
+          Top = 232
+          Width = 3
+          Height = 13
+        end
         object pn_cpu: TPanel
-          Left = 71
-          Top = 4
-          Width = 449
-          Height = 68
+          Left = 327
+          Top = 6
+          Width = 250
+          Height = 198
           TabOrder = 0
           object lb_nucleos: TLabel
             Left = 8
@@ -410,42 +416,54 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
           end
           object rb_CPU2: TRadioButton
             Left = 8
-            Top = 36
+            Top = 45
             Width = 65
             Height = 17
             Caption = '2 n'#250'cleos'
             TabOrder = 0
+            OnClick = rb_CPU2Click
           end
           object rb_CPU4: TRadioButton
-            Left = 112
-            Top = 36
+            Left = 8
+            Top = 84
             Width = 65
             Height = 17
             Caption = '4 n'#250'cleos'
             TabOrder = 1
+            OnClick = rb_CPU4Click
           end
           object rb_CPU6: TRadioButton
-            Left = 223
-            Top = 36
+            Left = 8
+            Top = 120
             Width = 66
             Height = 17
             Caption = '6 n'#250'cleos'
             TabOrder = 2
+            OnClick = rb_CPU6Click
           end
           object rb_CPU8: TRadioButton
-            Left = 327
-            Top = 36
+            Left = 8
+            Top = 157
             Width = 74
             Height = 17
             Caption = '8 n'#250'cleos'
             TabOrder = 3
+            OnClick = rb_CPU8Click
+          end
+          object txt_cpu: TMemo
+            Left = 128
+            Top = 58
+            Width = 89
+            Height = 69
+            TabOrder = 4
+            Visible = False
           end
         end
         object pn_ram: TPanel
-          Left = 71
-          Top = 76
-          Width = 449
-          Height = 68
+          Left = 7
+          Top = 6
+          Width = 306
+          Height = 125
           TabOrder = 1
           object lb_ram: TLabel
             Left = 8
@@ -462,33 +480,46 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
           end
           object rb_RAM4: TRadioButton
             Left = 8
-            Top = 36
+            Top = 25
             Width = 49
             Height = 17
             Caption = '4 GB'
             TabOrder = 0
+            OnClick = rb_RAM4Click
           end
           object rb_RAM8: TRadioButton
-            Left = 184
-            Top = 36
+            Left = 8
+            Top = 60
             Width = 49
             Height = 17
             Caption = '8 GB'
             TabOrder = 1
+            OnClick = rb_RAM8Click
           end
           object rb_RAM16: TRadioButton
-            Left = 376
-            Top = 36
+            Left = 7
+            Top = 96
             Width = 49
             Height = 17
             Caption = '16 GB'
             TabOrder = 2
+            OnClick = rb_RAM16Click
+          end
+          object txt_memoria: TMemo
+            Left = 152
+            Top = 38
+            Width = 89
+            Height = 69
+            Lines.Strings = (
+              '')
+            TabOrder = 3
+            Visible = False
           end
         end
         object pn_server: TPanel
-          Left = 71
-          Top = 149
-          Width = 449
+          Left = 7
+          Top = 136
+          Width = 306
           Height = 68
           TabOrder = 2
           object lb_server: TLabel
@@ -514,7 +545,7 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
             OnClick = rb_serverSimClick
           end
           object rb_serverNao: TRadioButton
-            Left = 88
+            Left = 63
             Top = 36
             Width = 49
             Height = 17
@@ -522,23 +553,42 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
             TabOrder = 1
             OnClick = rb_serverNaoClick
           end
+          object txt_servidor: TMemo
+            Left = 176
+            Top = 4
+            Width = 89
+            Height = 69
+            Lines.Strings = (
+              '')
+            TabOrder = 2
+            Visible = False
+          end
         end
         object txt_Firebird: TMemo
-          Left = 71
-          Top = 223
-          Width = 449
-          Height = 52
-          Lines.Strings = (
-            '')
+          Left = 7
+          Top = 210
+          Width = 306
+          Height = 66
+          ScrollBars = ssVertical
           TabOrder = 3
         end
-        object Button1: TButton
-          Left = 252
-          Top = 281
+        object btn_txtFirebird: TButton
+          Left = 124
+          Top = 278
           Width = 89
           Height = 36
           Caption = 'Copiar'
           TabOrder = 4
+          OnClick = btn_txtFirebirdClick
+        end
+        object btn_comoUsar: TButton
+          Left = 512
+          Top = 278
+          Width = 65
+          Height = 25
+          Caption = 'Como usar'
+          TabOrder = 5
+          OnClick = btn_comoUsarClick
         end
       end
     end
