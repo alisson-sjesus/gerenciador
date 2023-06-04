@@ -19,10 +19,10 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
     Top = 0
     Width = 597
     Height = 469
-    ActivePage = frmScripts
+    ActivePage = frmUteis
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 593
+    ExplicitWidth = 1119
     ExplicitHeight = 468
     object frmGerenciadorNFCe: TTabSheet
       Caption = 'Gerenciador de NFC-e'
@@ -142,9 +142,7 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
           'NFC-es pendentes'
           'Exportar movimenta'#231#227'o'
           'Enviar NFC-es com status de "Envie na frente do caixa"'
-          
-            'Corrigir valor de notas com diferen'#231'a de centavos entre VENDAS e' +
-            ' NFMASTER')
+          'Corrigir diferen'#231'a de centavos entre VENDAS e NFMASTER')
       end
       object txtScripts: TMemo
         Left = 88
@@ -153,6 +151,7 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         Height = 105
         Color = clSilver
         ReadOnly = True
+        ScrollBars = ssVertical
         TabOrder = 1
       end
       object btnCopiarScript: TButton
@@ -207,19 +206,23 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
         OnChange = opcoesUteisChange
         Items.Strings = (
           'Portas do Firewall'
-          'Reparar base corrompida')
+          'Reparar base corrompida'
+          'Delet'#227'o'
+          'Configurar CPU e RAM para Firebird')
       end
       object txtUteis: TMemo
         Left = 64
         Top = 144
         Width = 425
-        Height = 33
+        Height = 48
         Color = clMenu
         Lines.Strings = (
           
             '65123, 65100, 64123, 9092, 4899, 4096, 3050,992, 993, 995, 587, ' +
-            '465, 445, 80, 21')
+            '465, 445, '
+          '80, 21')
         ReadOnly = True
+        ScrollBars = ssVertical
         TabOrder = 1
       end
       object btnCopiarUteis: TButton
@@ -377,6 +380,165 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
           Caption = 'Copiar'
           TabOrder = 8
           OnClick = btn_quartoTerceiroPassoClick
+        end
+      end
+      object pn_perguntas: TPanel
+        Left = 595
+        Top = 3
+        Width = 589
+        Height = 342
+        TabOrder = 4
+        Visible = False
+        object pn_cpu: TPanel
+          Left = 71
+          Top = 4
+          Width = 449
+          Height = 68
+          TabOrder = 0
+          object lb_nucleos: TLabel
+            Left = 8
+            Top = 3
+            Width = 178
+            Height = 16
+            Caption = 'Quantos n'#250'cleos o CPU possui?'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object rb_CPU2: TRadioButton
+            Left = 8
+            Top = 36
+            Width = 65
+            Height = 17
+            Caption = '2 n'#250'cleos'
+            TabOrder = 0
+          end
+          object rb_CPU4: TRadioButton
+            Left = 112
+            Top = 36
+            Width = 65
+            Height = 17
+            Caption = '4 n'#250'cleos'
+            TabOrder = 1
+          end
+          object rb_CPU6: TRadioButton
+            Left = 223
+            Top = 36
+            Width = 66
+            Height = 17
+            Caption = '6 n'#250'cleos'
+            TabOrder = 2
+          end
+          object rb_CPU8: TRadioButton
+            Left = 327
+            Top = 36
+            Width = 74
+            Height = 17
+            Caption = '8 n'#250'cleos'
+            TabOrder = 3
+          end
+        end
+        object pn_ram: TPanel
+          Left = 71
+          Top = 76
+          Width = 449
+          Height = 68
+          TabOrder = 1
+          object lb_ram: TLabel
+            Left = 8
+            Top = 3
+            Width = 150
+            Height = 16
+            Caption = 'Quanto de mem'#243'ria RAM?'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object rb_RAM4: TRadioButton
+            Left = 8
+            Top = 36
+            Width = 49
+            Height = 17
+            Caption = '4 GB'
+            TabOrder = 0
+          end
+          object rb_RAM8: TRadioButton
+            Left = 184
+            Top = 36
+            Width = 49
+            Height = 17
+            Caption = '8 GB'
+            TabOrder = 1
+          end
+          object rb_RAM16: TRadioButton
+            Left = 376
+            Top = 36
+            Width = 49
+            Height = 17
+            Caption = '16 GB'
+            TabOrder = 2
+          end
+        end
+        object pn_server: TPanel
+          Left = 71
+          Top = 149
+          Width = 449
+          Height = 68
+          TabOrder = 2
+          object lb_server: TLabel
+            Left = 8
+            Top = 3
+            Width = 131
+            Height = 16
+            Caption = 'O servidor '#233' dedicado?'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object rb_serverSim: TRadioButton
+            Left = 8
+            Top = 36
+            Width = 49
+            Height = 17
+            Caption = 'Sim'
+            TabOrder = 0
+            OnClick = rb_serverSimClick
+          end
+          object rb_serverNao: TRadioButton
+            Left = 88
+            Top = 36
+            Width = 49
+            Height = 17
+            Caption = 'N'#227'o'
+            TabOrder = 1
+            OnClick = rb_serverNaoClick
+          end
+        end
+        object txt_Firebird: TMemo
+          Left = 71
+          Top = 223
+          Width = 449
+          Height = 52
+          Lines.Strings = (
+            '')
+          TabOrder = 3
+        end
+        object Button1: TButton
+          Left = 252
+          Top = 281
+          Width = 89
+          Height = 36
+          Caption = 'Copiar'
+          TabOrder = 4
         end
       end
     end
