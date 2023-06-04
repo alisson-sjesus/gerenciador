@@ -61,7 +61,12 @@ type
     rb_serverSim: TRadioButton;
     rb_serverNao: TRadioButton;
     pn_perguntas: TPanel;
-    Button1: TButton;
+    btn_txtFirebird: TButton;
+    txt_memoria: TMemo;
+    txt_cpu: TMemo;
+    txt_servidor: TMemo;
+    txt_comoUsar: TLabel;
+    btn_comoUsar: TButton;
     procedure btn_GerarClick(Sender: TObject);
     procedure btn_LimparClick(Sender: TObject);
     procedure btn_CopiarClick(Sender: TObject);
@@ -74,15 +79,24 @@ type
     procedure btn_copiarSegundoPassoClick(Sender: TObject);
     procedure btn_copiarTerceiroPassoClick(Sender: TObject);
     procedure btn_quartoTerceiroPassoClick(Sender: TObject);
-    procedure rb_serverSimClick(Sender: TObject);
     procedure rb_serverNaoClick(Sender: TObject);
+    procedure rb_CPU2Click(Sender: TObject);
+    procedure rb_RAM4Click(Sender: TObject);
+    procedure rb_CPU4Click(Sender: TObject);
+    procedure rb_CPU6Click(Sender: TObject);
+    procedure rb_CPU8Click(Sender: TObject);
+    procedure rb_RAM8Click(Sender: TObject);
+    procedure rb_RAM16Click(Sender: TObject);
+    procedure rb_serverSimClick(Sender: TObject);
+    procedure btn_txtFirebirdClick(Sender: TObject);
+    procedure btn_comoUsarClick(Sender: TObject);
   private
     { Private declarations }
   public
     var
     regex: TRegEx;
     Matches: TMatchCollection;
-    txtNFCeFormat, nfceOutput : String;
+    txtNFCeFormat, nfceOutput: String;
   end;
 
 var
@@ -198,6 +212,20 @@ procedure Tfrm_SGA_Principal.btn_quartoTerceiroPassoClick(Sender: TObject);
     ShowMessage('Texto foi copiado com sucesso!');
   end;
 
+procedure Tfrm_SGA_Principal.btn_txtFirebirdClick(Sender: TObject);
+begin
+    if txt_Firebird.Text = '' then
+      begin
+        ShowMessage('Não há nada para copiar');
+      end
+      else
+      begin
+        Clipboard.AsText := txt_Firebird.Text;
+        ShowMessage('Texto foi copiado com sucesso!');
+      end;
+
+end;
+
 procedure Tfrm_SGA_Principal.checkBoxExibirScriptClick(Sender: TObject);
   var
     scriptExportacao : String;
@@ -263,6 +291,8 @@ procedure Tfrm_SGA_Principal.opcoesScriptChange(Sender: TObject);
   end;
 
 procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
+var
+    memoriaRAM, cpu, server: array [0..4] of Integer;
   begin
     if opcoesUteis.Text = 'Portas do Firewall' then
       begin
@@ -326,47 +356,137 @@ procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
                          'delete from ESTOQUEDIA;' + sLineBreak +
                          'delete from PRODUTOSAUX;';
       end;
-
-
   end;
-
-procedure Tfrm_SGA_Principal.rb_serverNaoClick(Sender: TObject);
-begin
-  ShowMessage('Oi');
-end;
 
 function ram4(): String;
   begin
     Result := 'DefaultDbCachePages = 4096' + sLineBreak +
-              'FileSystemCacheThreshold = 67108864' + sLineBreak +
-              'FileSystemCacheSize = 70';
+              'FileSystemCacheThreshold = 67108864' + sLineBreak;
   end;
+
+function ram8(): String;
+  begin
+    Result := 'DefaultDbCachePages = 8192' + sLineBreak +
+              'FileSystemCacheThreshold = 134217728' + sLineBreak;
+  end;
+
+function ram16(): String;
+  begin
+    Result := 'DefaultDbCachePages = 16384' + sLineBreak +
+              'FileSystemCacheThreshold = 268435456' + sLineBreak;
+  end;
+
+function cpu2():String;
+  begin
+    Result := 'CpuAffinityMask = 3' + sLineBreak;
+  end;
+
+function cpu4():String;
+  begin
+    Result := 'CpuAffinityMask = 15' + sLineBreak;
+  end;
+
+function cpu6():String;
+  begin
+    Result := 'CpuAffinityMask = 63' + sLineBreak;
+  end;
+
+function cpu8():String;
+  begin
+    Result := 'CpuAffinityMask = 255' + sLineBreak;
+  end;
+
+function servidorSim():String;
+  begin
+    Result := 'FileSystemCacheSize = 70' + sLineBreak;
+  end;
+
+function servidorNao():String;
+  begin
+    Result := 'FileSystemCacheSize = 50' + sLineBreak;
+  end;
+
+procedure Tfrm_SGA_Principal.rb_CPU2Click(Sender: TObject);
+begin
+  txt_cpu.Text := '';
+  txt_cpu.Text := cpu2();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.rb_CPU4Click(Sender: TObject);
+begin
+  txt_cpu.Text := '';
+  txt_cpu.Text := cpu4();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.rb_CPU6Click(Sender: TObject);
+begin
+  txt_cpu.Text := '';
+  txt_cpu.Text := cpu6();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.rb_CPU8Click(Sender: TObject);
+begin
+  txt_cpu.Text := '';
+  txt_cpu.Text := cpu8();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.rb_RAM16Click(Sender: TObject);
+begin
+  txt_memoria.Text := '';
+  txt_memoria.Text := ram16();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.rb_RAM4Click(Sender: TObject);
+begin
+  txt_memoria.Text := '';
+  txt_memoria.Text := ram4();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.rb_RAM8Click(Sender: TObject);
+begin
+  txt_memoria.Text := '';
+  txt_memoria.Text := ram8();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
 
 procedure Tfrm_SGA_Principal.rb_serverSimClick(Sender: TObject);
 begin
-  if rb_CPU2.Checked and rb_RAM4.Checked then
+  txt_servidor.Text := '';
+  txt_servidor.Text := servidorSim();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.rb_serverNaoClick(Sender: TObject);
+begin
+  txt_servidor.Text := '';
+  txt_servidor.Text := servidorNao();
+  txt_Firebird.Text := txt_cpu.Text + txt_memoria.Text + txt_servidor.Text;
+end;
+
+procedure Tfrm_SGA_Principal.btn_comoUsarClick(Sender: TObject);
+var
+  valorFirebird : String;
+begin
+  if txt_cpu.Text = '' then
     begin
-      txt_Firebird.Text :=  'DefaultDbCachePages = 4096' + sLineBreak +
-                          'FileSystemCacheThreshold = 67108864' + sLineBreak +
-                          'FileSystemCacheSize = 70' + sLineBreak +
-                          'CpuAffinityMask = 3';
+      valorFirebird := 'CpuAffinityMask = 1';
     end
-  else if rb_CPU4.Checked and rb_RAM4.Checked then
+  else
     begin
-      txt_Firebird.Text :=  'DefaultDbCachePages = 4096' + sLineBreak +
-                          'FileSystemCacheThreshold = 67108864' + sLineBreak +
-                          'FileSystemCacheSize = 70' + sLineBreak +
-                          'CpuAffinityMask = 15';
-    end
-  else if rb_CPU8.Checked and rb_RAM4.Checked then
-    begin
-      txt_Firebird.Text :=  'DefaultDbCachePages = 4096' + sLineBreak +
-                          'FileSystemCacheThreshold = 67108864' + sLineBreak +
-                          'FileSystemCacheSize = 70' + sLineBreak +
-                          'CpuAffinityMask = 255';
+      valorFirebird :=  txt_cpu.Text;
     end;
 
-
+  ShowMessage('Localizar esses campos dentro do arquivo firebird.conf que está na pasta do Firebird' + sLineBreak +
+              'Tirar o "#" antes do nome do campo, por exemplo:' + sLineBreak +
+              'O padrão é assim: #CpuAffinityMask = 1' + sLineBreak +
+              'Deixar assim => ' + valorFirebird + sLineBreak +
+              sLineBreak + 'É recomendavel usar Firebird Classic');
 end;
 
 end.
