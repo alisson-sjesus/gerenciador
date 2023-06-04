@@ -44,6 +44,24 @@ type
     btn_quartoTerceiroPasso: TButton;
     lb_aviso: TLabel;
     Label7: TLabel;
+    pn_cpu: TPanel;
+    lb_nucleos: TLabel;
+    rb_CPU2: TRadioButton;
+    rb_CPU4: TRadioButton;
+    rb_CPU6: TRadioButton;
+    rb_CPU8: TRadioButton;
+    pn_ram: TPanel;
+    lb_ram: TLabel;
+    rb_RAM4: TRadioButton;
+    rb_RAM8: TRadioButton;
+    txt_Firebird: TMemo;
+    rb_RAM16: TRadioButton;
+    pn_server: TPanel;
+    lb_server: TLabel;
+    rb_serverSim: TRadioButton;
+    rb_serverNao: TRadioButton;
+    pn_perguntas: TPanel;
+    Button1: TButton;
     procedure btn_GerarClick(Sender: TObject);
     procedure btn_LimparClick(Sender: TObject);
     procedure btn_CopiarClick(Sender: TObject);
@@ -56,6 +74,8 @@ type
     procedure btn_copiarSegundoPassoClick(Sender: TObject);
     procedure btn_copiarTerceiroPassoClick(Sender: TObject);
     procedure btn_quartoTerceiroPassoClick(Sender: TObject);
+    procedure rb_serverSimClick(Sender: TObject);
+    procedure rb_serverNaoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -216,19 +236,29 @@ procedure Tfrm_SGA_Principal.opcoesScriptChange(Sender: TObject);
                            '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
                            'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ' + dataMesPassado();
       end
-    else if opcoesScript.Text = 'Exportar movimentação (Utilizar numeração de NFC-e)' then
+    else if opcoesScript.Text = '- Selecione uma opção -' then
       begin
-          txtScripts.Text := 'select n.* from nfmaster n' + sLineBreak +
-          '--join nfdet d on n.idnfmaster = d.idnfmaster' + sLineBreak +
-          '--join vendas v on v.idnfmaster = n.idnfmaster' + sLineBreak +
-          '--join areceber a on v.idcompra = a.idcompra' + sLineBreak +
-          'where n.situacao = 0 and n.serie = ''NFC-E'' and n.dataentsai between ' + dataMesPassado() + sLineBreak +
-          'and numnota in (' + nfceOutput + ')';
-      end
-      else if opcoesScript.Text = '- Selecione uma opção -' then
-        begin
         txtScripts.Text := '';
-        end;
+      end
+    else if opcoesScript.Text = 'Enviar NFC-es com status de "Envie na frente do caixa"' then
+      begin
+        txtScripts.Text := 'select idnfmaster, 0 as cstat from nfcependentes n' + sLineBreak +
+                           'where n.cstat in (''-4'', ''-3'')';
+      end
+    else if opcoesScript.Text = 'Corrigir diferença de centavos entre VENDAS e NFMASTER' then
+      begin
+        txtScripts.Text := 'select v.idcompra, sum (d.quantidade * d.composicao * d.vlrunitario - d.vlrunitdesc + d.vlrunitacresc) as VALOR --VLRDOCUMENTO' + sLineBreak +
+                           'from vendas v' + sLineBreak +
+                           'join nfmaster m on m.idnfmaster=v.idnfmaster' + sLineBreak +
+                           'join nfdet d on d.idnfmaster=m.idnfmaster' + sLineBreak +
+                           'join areceber ar on ar.idcompra=v.idcompra' + sLineBreak +
+                           'where' + sLineBreak +
+                           'v.situacao=''0'' and m.situacao=''0'' and m.serie=''NFC-E'' and m.emissao between ' + dataMesPassado() +  ' and m.protocolo = ''''' + sLineBreak +
+                           'and v.desconto=''0'' and v.acrescimo=''0'' and d.cancelado=''0''' + sLineBreak +
+                           'group by idcompra';
+      end;
+
+
 
   end;
 
@@ -240,6 +270,9 @@ procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
         txtUteis.Visible := True;
         btnCopiarUteis.Visible := True;
         lb_aviso.Visible := False;
+        btnCopiarUteis.Top := btnCopiarUteis.Top - 117;
+        txtUteis.Height := 33;
+        pn_perguntas.Visible := False;
         txtUteis.Text := '65123, 65100, 64123, 9092, 4899, 4096, 3050,992, 993, 995, 587, 465, 445, 80, 21';
       end
     else if opcoesUteis.Text = 'Reparar base corrompida' then
@@ -248,6 +281,7 @@ procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
         lb_aviso.Visible := True;
         pn_base.Top := 144;
         pn_base.Visible := True;
+        pn_perguntas.Visible := False;
         txtUteis.Visible := False;
         btnCopiarUteis.Visible := False;
         txtUteis.Text := '1º passo - gfix -v -f SAC4WIN2.fdb -user SYSDBA -pass masterkey' + sLineBreak +
@@ -255,10 +289,84 @@ procedure Tfrm_SGA_Principal.opcoesUteisChange(Sender: TObject);
                            '3º passo - gbak -g -b -z -l -v SAC4WIN2.fdb SAC4WINbkp.fbk -user SYSDBA -pass masterkey' + sLineBreak +
                            '4º passo - gbak -g -c -z -v SAC4WINbkp.fbk  SAC4WINnewbkp.fdb -user SYSDBA -pass masterkey';
       end
-    else
+    else if opcoesUteis.Text = 'Configurar CPU e RAM para Firebird' then
       begin
-        txtScripts.Text := 'Oi :)';
+        lb_aviso.Visible := False;
+        pn_perguntas.Top := 110;
+        pn_perguntas.Left := 1;
+        pn_base.Visible := False;
+        pn_perguntas.Visible := True;
+        txtUteis.Visible := False;
+        btnCopiarUteis.Visible := False;
+        txtUteis.Text := '';
+      end
+      else if opcoesUteis.Text = 'Deletão' then
+      begin
+        pn_base.Visible := False;
+        txtUteis.Visible := True;
+        btnCopiarUteis.Visible := True;
+        txtUteis.Height := 150;
+        btnCopiarUteis.Top := btnCopiarUteis.Top + 117;
+        lb_aviso.Visible := False;
+        pn_perguntas.Visible := False;
+        txtUteis.Text := 'delete from AUDITORIA;' + sLineBreak +
+                         'delete from COMPRAS;' + sLineBreak +
+                         'delete from ECFPOSICAOTRIB;' + sLineBreak +
+                         'delete from r01;' + sLineBreak +
+                         'delete from r02;' + sLineBreak +
+                         'delete from r03;' + sLineBreak +
+                         'delete from r06;' + sLineBreak +
+                         'delete from r07;' + sLineBreak +
+                         'delete from NFMASTER;' + sLineBreak +
+                         'delete from NUMEROSERIES;' + sLineBreak +
+                         'delete from SOBOX;' + sLineBreak +
+                         'delete from VENDAS;' + sLineBreak +
+                         'delete from turnos;' + sLineBreak +
+                         'delete from INVENTARIOS;' + sLineBreak +
+                         'delete from ESTOQUEDIA;' + sLineBreak +
+                         'delete from PRODUTOSAUX;';
       end;
+
+
   end;
+
+procedure Tfrm_SGA_Principal.rb_serverNaoClick(Sender: TObject);
+begin
+  ShowMessage('Oi');
+end;
+
+function ram4(): String;
+  begin
+    Result := 'DefaultDbCachePages = 4096' + sLineBreak +
+              'FileSystemCacheThreshold = 67108864' + sLineBreak +
+              'FileSystemCacheSize = 70';
+  end;
+
+procedure Tfrm_SGA_Principal.rb_serverSimClick(Sender: TObject);
+begin
+  if rb_CPU2.Checked and rb_RAM4.Checked then
+    begin
+      txt_Firebird.Text :=  'DefaultDbCachePages = 4096' + sLineBreak +
+                          'FileSystemCacheThreshold = 67108864' + sLineBreak +
+                          'FileSystemCacheSize = 70' + sLineBreak +
+                          'CpuAffinityMask = 3';
+    end
+  else if rb_CPU4.Checked and rb_RAM4.Checked then
+    begin
+      txt_Firebird.Text :=  'DefaultDbCachePages = 4096' + sLineBreak +
+                          'FileSystemCacheThreshold = 67108864' + sLineBreak +
+                          'FileSystemCacheSize = 70' + sLineBreak +
+                          'CpuAffinityMask = 15';
+    end
+  else if rb_CPU8.Checked and rb_RAM4.Checked then
+    begin
+      txt_Firebird.Text :=  'DefaultDbCachePages = 4096' + sLineBreak +
+                          'FileSystemCacheThreshold = 67108864' + sLineBreak +
+                          'FileSystemCacheSize = 70' + sLineBreak +
+                          'CpuAffinityMask = 255';
+    end;
+
+
+end;
 
 end.
