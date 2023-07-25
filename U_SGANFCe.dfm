@@ -22,8 +22,6 @@ object frm_SGA_Principal: Tfrm_SGA_Principal
     ActivePage = frmGerenciadorNFCe
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 593
-    ExplicitHeight = 468
     object frmGerenciadorNFCe: TTabSheet
       Caption = 'Gerenciador de NFC-e'
       object Label1: TLabel

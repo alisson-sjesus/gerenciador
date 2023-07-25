@@ -196,7 +196,7 @@ procedure Tfrm_SGA_Principal.btn_LimparClick(Sender: TObject);
   begin
     if (txtNFCe.Text = '') then
       begin
-        ShowMessage('Campo já está limpo');
+        ShowMessage('Campo já está limpo!');
       end
     else
       begin
